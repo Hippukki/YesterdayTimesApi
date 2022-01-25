@@ -10,7 +10,7 @@ namespace YesterdayTimesApi.Data
     {
         //Article
         Task<Article> GetArticleAsync(Guid id);
-        Task<IEnumerable<Article>> GetArticleAsync();
+        Task<IEnumerable<Article>> GetArticlesAsync();
         Task CreateArticleAsync(Article item);
         Task UpdateArticleAsync(Article item);
         Task DeleteArticleAsync(Guid id);

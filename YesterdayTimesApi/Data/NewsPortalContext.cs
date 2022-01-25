@@ -20,12 +20,12 @@ namespace YesterdayTimesApi.Data
 
         public async Task<Article> GetArticleAsync(Guid id)
         {
-            return await Articles.Where(p => p.Id == id).SingleOrDefaultAsync();            
+            return await Articles.FindAsync(id);            
         }
 
-        public async Task<IEnumerable<Article>> GetArticleAsync()
+        public async Task<IEnumerable<Article>> GetArticlesAsync()
         {
-            throw new NotImplementedException();
+            return await Articles.ToListAsync();
         }
 
         public async Task CreateArticleAsync(Article item)
@@ -36,12 +36,15 @@ namespace YesterdayTimesApi.Data
 
         public async Task UpdateArticleAsync(Article item)
         {
-            throw new NotImplementedException();
+            Articles.Update(item);
+            await SaveChangesAsync();
         }
 
         public async Task DeleteArticleAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var removed = await Articles.FindAsync(id);
+            Articles.Remove(removed);
+            SaveChanges();
         }
     }
 }

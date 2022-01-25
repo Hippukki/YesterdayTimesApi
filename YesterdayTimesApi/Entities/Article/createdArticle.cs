@@ -2,7 +2,7 @@
 
 namespace YesterdayTimesApi.Entities
 {
-    public record createdArticle
+    public record CreatedArticle
     {
         [Required]
         public string Title { get; set; }

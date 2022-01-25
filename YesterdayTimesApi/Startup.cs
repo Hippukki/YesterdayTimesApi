@@ -34,7 +34,7 @@ namespace YesterdayTimesApi
 
             services.AddDbContext<IRepository,NewsPortalContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql(connectionString, serverVersion));
+                .UseMySql(connectionString, serverVersion).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
             services.AddControllers(options =>
             {
