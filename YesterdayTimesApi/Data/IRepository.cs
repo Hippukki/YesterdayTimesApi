@@ -15,5 +15,11 @@ namespace YesterdayTimesApi.Data
         Task UpdateArticleAsync(Article item);
         Task DeleteArticleAsync(Guid id);
 
+        //Category
+        Task<Category> GetCategoryAsync(Guid id);
+        Task<IEnumerable<Category>> GetCategoriesAsync();
+        Task CreateCategoryAsync(Category item);
+        Task UpdateCategoryAsync(Category item);
+        Task DeleteCategoryAsync(Guid id);
     }
 }

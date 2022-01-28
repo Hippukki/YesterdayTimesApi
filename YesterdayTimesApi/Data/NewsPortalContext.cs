@@ -18,6 +18,7 @@ namespace YesterdayTimesApi.Data
             Database.EnsureCreated();
         }
 
+        #region [Article implementation]
         public async Task<Article> GetArticleAsync(Guid id)
         {
             return await Articles.FindAsync(id);            
@@ -42,9 +43,41 @@ namespace YesterdayTimesApi.Data
 
         public async Task DeleteArticleAsync(Guid id)
         {
-            var removed = await Articles.FindAsync(id);
-            Articles.Remove(removed);
+            var existingItem = await Articles.FindAsync(id);
+            Articles.Remove(existingItem);
             SaveChanges();
         }
+        #endregion
+
+        #region [Category implementation]
+        public async Task<Category> GetCategoryAsync(Guid id)
+        {
+            return await Categories.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        {
+            return await Categories.ToListAsync();
+        }
+
+        public async Task CreateCategoryAsync(Category item)
+        {
+            await Categories.AddAsync(item);
+            SaveChanges();
+        }
+
+        public async Task UpdateCategoryAsync(Category item)
+        {
+            Categories.Update(item);
+            await SaveChangesAsync();
+        }
+
+        public async Task DeleteCategoryAsync(Guid id)
+        {
+            var existingItem = await Categories.FindAsync(id);
+            Categories.Remove(existingItem);
+            SaveChanges();
+        }
+        #endregion
     }
 }

@@ -8,17 +8,27 @@ namespace YesterdayTimesApi
 {
     public static class Extensios
     {
-        public static ArticleDTO ArticleAsDTO(this Article entuty)
+        public static ArticleDTO ArticleAsDTO(this Article entity)
         {
             return new ArticleDTO
             {
-                Id = entuty.Id,
-                Title = entuty.Title,
-                Body = entuty.Body,
-                createdDate = entuty.createdDate,
-                Creators = entuty.Creators,
-                Categories = entuty.Categories
+                Id = entity.Id,
+                Title = entity.Title,
+                Body = entity.Body,
+                createdDate = entity.createdDate,
+                Creators = entity.Creators,
+                Categories = entity.Categories
             };
-        } 
+        }
+        public static CategoryDTO CategoryAsDTO(this Category entity)
+        {
+            return new CategoryDTO
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Articles = entity.Articles,
+                Users = entity.Users
+            };
+        }
     }
 }
