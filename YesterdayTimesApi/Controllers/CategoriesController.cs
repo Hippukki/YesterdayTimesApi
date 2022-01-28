@@ -18,7 +18,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<CategoryDTO>> CreateCategoryAsync(CreatedCategory created)
         {
             Category category = new()
@@ -29,7 +29,7 @@ namespace YesterdayTimesApi.Controllers
             await repository.CreateCategoryAsync(category);
             return CreatedAtAction(nameof(GetCategoryAsync), new { Id = category.Id }, category.CategoryAsDTO());
         }
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<CategoryDTO>> GetCategoryAsync(Guid id)
         {
             var category = await repository.GetCategoryAsync(id);

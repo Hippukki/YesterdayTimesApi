@@ -20,7 +20,7 @@ namespace YesterdayTimesApi.Controllers
             this.repository = repository;
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<ArticleDTO>> CreateArticleAsync(CreatedArticle created)
         {
             Article article = new()
@@ -33,7 +33,7 @@ namespace YesterdayTimesApi.Controllers
             await repository.CreateArticleAsync(article);
             return CreatedAtAction(nameof(GetArticleAsync), new { Id = article.Id }, article.ArticleAsDTO());
         }
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<ArticleDTO>> GetArticleAsync(Guid id)
         {
             var article = await repository.GetArticleAsync(id);
@@ -43,13 +43,13 @@ namespace YesterdayTimesApi.Controllers
             }
             return article.ArticleAsDTO();
         }
-        [HttpGet]
+        [HttpGet("get")]
         public async Task<IEnumerable<ArticleDTO>> GetArticlesAsync()
         {
             var articles = (await repository.GetArticlesAsync()).Select(article => article.ArticleAsDTO());
             return articles;
         }
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public async Task<ActionResult> UpdateArticleAsync(Guid id, UpdatedArticle updated)
         {
             var existingArticle = await repository.GetArticleAsync(id);
@@ -65,7 +65,7 @@ namespace YesterdayTimesApi.Controllers
             await repository.UpdateArticleAsync(article);
             return NoContent();
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteArticleAsync(Guid id)
         {
             var existingArticle = await repository.GetArticleAsync(id);
