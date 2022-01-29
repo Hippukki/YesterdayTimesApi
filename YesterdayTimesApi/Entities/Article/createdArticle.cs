@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace YesterdayTimesApi.Entities
 {
@@ -8,5 +9,7 @@ namespace YesterdayTimesApi.Entities
         public string Title { get; set; }
         [Required]
         public string Body { get; set; }
+        [Required]
+        public Guid idCategory { get; set; }
     }
 }

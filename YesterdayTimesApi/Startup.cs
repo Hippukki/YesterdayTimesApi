@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
+using Microsoft.AspNetCore.Cors;
 
 namespace YesterdayTimesApi
 {
@@ -32,9 +33,9 @@ namespace YesterdayTimesApi
 
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 
-            services.AddDbContext<IRepository,NewsPortalContext>(
+            services.AddDbContext<IRepository, NewsPortalContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql(connectionString, serverVersion).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+                .UseMySql(connectionString, serverVersion));//.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
             services.AddControllers(options =>
             {
@@ -45,6 +46,8 @@ namespace YesterdayTimesApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "YesterdayTimesApi", Version = "v1" });
             });
+
+            services.AddCors();
         }
 
 
@@ -60,6 +63,8 @@ namespace YesterdayTimesApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.AllowAnyOrigin());
 
             app.UseAuthorization();
 

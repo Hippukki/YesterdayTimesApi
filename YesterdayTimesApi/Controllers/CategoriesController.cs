@@ -39,5 +39,22 @@ namespace YesterdayTimesApi.Controllers
             }
             return category.CategoryAsDTO();
         }
+        [HttpGet("get")]
+        public async Task<IEnumerable<CategoryDTO>> GetCategoriesAsync()
+        {
+            var categories = (await repository.GetCategoriesAsync()).Select(category => category.CategoryAsDTO());
+            return categories;
+        }
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> DeleteCategoryAsync(Guid id)
+        {
+            var existingCategory = await repository.GetCategoryAsync(id);
+            if (existingCategory is null)
+            {
+                return NotFound();
+            }
+            await repository.DeleteCategoryAsync(id);
+            return NoContent();
+        }
     }
 }

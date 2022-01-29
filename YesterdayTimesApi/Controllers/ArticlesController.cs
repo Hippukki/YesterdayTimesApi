@@ -21,17 +21,27 @@ namespace YesterdayTimesApi.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ArticleDTO>> CreateArticleAsync(CreatedArticle created)
+        public async Task<ActionResult> CreateArticleAsync(CreatedArticle created, Guid idCreator)
         {
+            var creator = await repository.GetCreatorAsync(idCreator);
+            var category = await repository.GetCategoryAsync(created.idCategory);
+            if(category is null)
+            {
+                return NotFound("Selected category doesn not exist");
+            }
             Article article = new()
             {
                 Id = Guid.NewGuid(),
                 Title = created.Title,
                 Body = created.Body,
-                createdDate = DateTimeOffset.UtcNow
+                createdDate = DateTimeOffset.UtcNow,
+                Creators = new() { creator },
+                idCategory = created.idCategory
             };
+            creator.Articles = new() { article };
             await repository.CreateArticleAsync(article);
-            return CreatedAtAction(nameof(GetArticleAsync), new { Id = article.Id }, article.ArticleAsDTO());
+            await repository.UpdateCreatorAsync();
+            return NoContent();
         }
         [HttpGet("get/{id}")]
         public async Task<ActionResult<ArticleDTO>> GetArticleAsync(Guid id)
@@ -57,12 +67,9 @@ namespace YesterdayTimesApi.Controllers
             {
                 return NotFound();
             }
-            Article article = existingArticle with//Создаёт копию с изменнёнными свойствами
-            {
-               Title = updated.Title,
-               Body = updated.Body
-            };
-            await repository.UpdateArticleAsync(article);
+            existingArticle.Title = updated.Title;
+            existingArticle.Body = updated.Body;
+            await repository.UpdateArticleAsync();
             return NoContent();
         }
         [HttpDelete("delete/{id}")]

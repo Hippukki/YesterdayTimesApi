@@ -17,7 +17,7 @@ namespace YesterdayTimesApi
                 Body = entity.Body,
                 createdDate = entity.createdDate,
                 Creators = entity.Creators,
-                Categories = entity.Categories
+                idCategory = entity.idCategory
             };
         }
         public static CategoryDTO CategoryAsDTO(this Category entity)
@@ -28,6 +28,15 @@ namespace YesterdayTimesApi
                 Name = entity.Name,
                 Articles = entity.Articles,
                 Users = entity.Users
+            };
+        }
+        public static CreatorDTO CreatorAsDTO(this Creator entity)
+        {
+            return new CreatorDTO
+            {
+                Id = entity.Id,
+                fullName = entity.fullName,
+                Articles = entity.Articles
             };
         }
     }

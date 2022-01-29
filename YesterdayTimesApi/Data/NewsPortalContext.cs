@@ -35,9 +35,8 @@ namespace YesterdayTimesApi.Data
             SaveChanges();
         }
 
-        public async Task UpdateArticleAsync(Article item)
+        public async Task UpdateArticleAsync()
         {
-            Articles.Update(item);
             await SaveChangesAsync();
         }
 
@@ -66,9 +65,8 @@ namespace YesterdayTimesApi.Data
             SaveChanges();
         }
 
-        public async Task UpdateCategoryAsync(Category item)
+        public async Task UpdateCategoryAsync()
         {
-            Categories.Update(item);
             await SaveChangesAsync();
         }
 
@@ -77,6 +75,26 @@ namespace YesterdayTimesApi.Data
             var existingItem = await Categories.FindAsync(id);
             Categories.Remove(existingItem);
             SaveChanges();
+        }
+        #endregion
+
+        #region Creator implementation
+        public async Task<Creator> GetCreatorAsync(Guid id)
+        {
+            return await Creators.FindAsync(id);
+        }
+        public async Task CreateCreatorAsync(Creator item)
+        {
+            await Creators.AddAsync(item);
+            SaveChanges();
+        }
+        public async Task UpdateCreatorAsync()
+        {
+            await SaveChangesAsync();
+        }
+        public async Task<IEnumerable<Creator>> GetCreatorsAsync()
+        {
+            return await Creators.ToListAsync();
         }
         #endregion
     }

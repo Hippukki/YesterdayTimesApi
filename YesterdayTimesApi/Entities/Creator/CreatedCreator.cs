@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace YesterdayTimesApi.Entities
 {
-    public record Creator
+    public record CreatedCreator
     {
-        public Guid Id { get; init; }
+        [Required]
         public string fullName { get; set; }
-        public List<Article> Articles { get; set; }
     }
 }
