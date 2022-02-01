@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
 using Microsoft.AspNetCore.Cors;
+using System.Text.Json.Serialization;
 
 namespace YesterdayTimesApi
 {
@@ -40,7 +41,7 @@ namespace YesterdayTimesApi
             services.AddControllers(options =>
             {
                 options.SuppressAsyncSuffixInActionNames = false;
-            });
+            }).AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             services.AddSwaggerGen(c =>
             {

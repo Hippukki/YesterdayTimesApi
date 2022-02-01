@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YesterdayTimesApi.Data;
 using YesterdayTimesApi.Entities;
 
 namespace YesterdayTimesApi
 {
     public static class Extensios
     {
-        public static ArticleDTO ArticleAsDTO(this Article entity)
+        public static ArticleDTO ArticleAsDTO(this Article entity, Category category)
         {
+
             return new ArticleDTO
             {
                 Id = entity.Id,
@@ -17,7 +19,7 @@ namespace YesterdayTimesApi
                 Body = entity.Body,
                 createdDate = entity.createdDate,
                 Creators = entity.Creators,
-                idCategory = entity.idCategory
+                Category = category
             };
         }
         public static CategoryDTO CategoryAsDTO(this Category entity)

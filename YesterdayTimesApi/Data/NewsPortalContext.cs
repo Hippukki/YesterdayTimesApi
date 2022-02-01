@@ -21,7 +21,23 @@ namespace YesterdayTimesApi.Data
         #region [Article implementation]
         public async Task<Article> GetArticleAsync(Guid id)
         {
-            return await Articles.FindAsync(id);            
+            var article = await Articles.FindAsync(id);
+            foreach( var c in article.Creators)
+            {
+                article.Creators.Add(c);
+            }
+            return article;
+
+
+            //var courses = db.Courses.Include(c => c.Students).ToList();
+            //// выводим все курсы
+            //foreach (var c in courses)
+            //{
+            //    Console.WriteLine($"Course: {c.Name}");
+            //    // выводим всех студентов для данного кура
+            //    foreach (Student s in c.Students)
+            //        Console.WriteLine($"Name: {s.Name}");
+            //    Console.WriteLine("-------------------");
         }
 
         public async Task<IEnumerable<Article>> GetArticlesAsync()
