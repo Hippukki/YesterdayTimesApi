@@ -36,7 +36,8 @@ namespace YesterdayTimesApi.Controllers
                 Body = created.Body,
                 createdDate = DateTimeOffset.UtcNow,
                 Creators = new() { creator },
-                idCategory = created.idCategory
+                CategoryID = created.idCategory,
+                Category = category
             };
             creator.Articles = new() { article };
             await repository.CreateArticleAsync(article);
@@ -51,14 +52,14 @@ namespace YesterdayTimesApi.Controllers
             {
                 return NotFound();
             }
-            var category = await repository.GetCategoryAsync(article.idCategory);
-            return article.ArticleAsDTO(category);
+            return article.ArticleAsDTO(repository.GetCategoryAsync(article.CategoryID)
+                .Result);
         }
         [HttpGet("get")]
         public async Task<IEnumerable<ArticleDTO>> GetArticlesAsync()
         {
             var articles = (await repository.GetArticlesAsync())
-                .Select(article => article.ArticleAsDTO(repository.GetCategoryAsync(article.idCategory)
+                .Select(article => article.ArticleAsDTO(repository.GetCategoryAsync(article.CategoryID)
                 .Result));
             return articles;
         }
