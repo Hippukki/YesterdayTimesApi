@@ -52,15 +52,13 @@ namespace YesterdayTimesApi.Controllers
             {
                 return NotFound();
             }
-            return article.ArticleAsDTO(repository.GetCategoryAsync(article.CategoryID)
-                .Result);
+            return article.ArticleAsDTO();
         }
         [HttpGet("get")]
         public async Task<IEnumerable<ArticleDTO>> GetArticlesAsync()
         {
             var articles = (await repository.GetArticlesAsync())
-                .Select(article => article.ArticleAsDTO(repository.GetCategoryAsync(article.CategoryID)
-                .Result));
+                .Select(article => article.ArticleAsDTO());
             return articles;
         }
         [HttpPut("update/{id}")]

@@ -22,6 +22,7 @@ namespace YesterdayTimesApi.Data
         public async Task<Article> GetArticleAsync(Guid id)
         {
             var articles = await Articles.Include(a => a.Creators)
+                .Include(a => a.Category)
                 .ToListAsync();
             var article = (from a in articles where a.Id == id select a)
                 .SingleOrDefault();
@@ -31,6 +32,7 @@ namespace YesterdayTimesApi.Data
         public async Task<IEnumerable<Article>> GetArticlesAsync()
         {
             var articles = await Articles.Include(a => a.Creators)
+                .Include(a => a.Category)
                 .ToListAsync();
             return articles;
         }

@@ -9,7 +9,7 @@ namespace YesterdayTimesApi
 {
     public static class Extensios
     {
-        public static ArticleDTO ArticleAsDTO(this Article entity, Category category)
+        public static ArticleDTO ArticleAsDTO(this Article entity)
         {
 
             return new ArticleDTO
@@ -19,7 +19,7 @@ namespace YesterdayTimesApi
                 Body = entity.Body,
                 createdDate = entity.createdDate,
                 Creators = entity.Creators,
-                Category = category
+                Category = entity.Category
             };
         }
         public static CategoryDTO CategoryAsDTO(this Category entity)
