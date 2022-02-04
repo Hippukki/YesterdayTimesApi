@@ -19,7 +19,7 @@ namespace YesterdayTimesApi.Data
         Task<Category> GetCategoryAsync(Guid id);
         Task<IEnumerable<Category>> GetCategoriesAsync();
         Task CreateCategoryAsync(Category item);
-        Task UpdateCategoryAsync();
+        //Task UpdateCategoryAsync();
         Task DeleteCategoryAsync(Guid id);
 
         //Creator

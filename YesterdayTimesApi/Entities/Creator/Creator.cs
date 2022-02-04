@@ -9,6 +9,6 @@ namespace YesterdayTimesApi.Entities
     {
         public Guid Id { get; init; }
         public string fullName { get; set; }
-        public List<Article> Articles { get; set; }
+        public List<Article> Articles { get; set; } = new();
     }
 }

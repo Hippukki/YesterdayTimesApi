@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace YesterdayTimesApi.Entities
 {
-    public record Category
+    public record CreatorDetailedDTO
     {
         public Guid Id { get; init; }
-        public string Name { get; set; }
-        public List<Article> Articles { get; set; } = new();
-        public List<User> Users { get; set; } = new();
-
+        public string fullName { get; set; }
+        public List<ArticleDTO> Articles { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace YesterdayTimesApi
             services.AddControllers(options =>
             {
                 options.SuppressAsyncSuffixInActionNames = false;
-            }).AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            });//.AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             services.AddSwaggerGen(c =>
             {

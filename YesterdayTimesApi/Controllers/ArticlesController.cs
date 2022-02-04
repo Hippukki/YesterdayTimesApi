@@ -45,20 +45,20 @@ namespace YesterdayTimesApi.Controllers
             return NoContent();
         }
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<ArticleDTO>> GetArticleAsync(Guid id)
+        public async Task<ActionResult<ArticleDetailedDTO>> GetArticleAsync(Guid id)
         {
             var article = await repository.GetArticleAsync(id);
             if (article is null)
             {
                 return NotFound();
             }
-            return article.ArticleAsDTO();
+            return article.ArticleAsDetailedDTO();
         }
         [HttpGet("get")]
-        public async Task<IEnumerable<ArticleDTO>> GetArticlesAsync()
+        public async Task<IEnumerable<ArticleDetailedDTO>> GetArticlesAsync()
         {
             var articles = (await repository.GetArticlesAsync())
-                .Select(article => article.ArticleAsDTO());
+                .Select(article => article.ArticleAsDetailedDTO());
             return articles;
         }
         [HttpPut("update/{id}")]

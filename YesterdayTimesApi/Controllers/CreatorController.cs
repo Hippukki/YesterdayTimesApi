@@ -30,19 +30,19 @@ namespace YesterdayTimesApi.Controllers
             return NoContent();
         }
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<CreatorDTO>> GetCreatorAsync(Guid id)
+        public async Task<ActionResult<CreatorDetailedDTO>> GetCreatorAsync(Guid id)
         {
             var creator = await repository.GetCreatorAsync(id);
             if (creator is null)
             {
                 return NotFound();
             }
-            return creator.CreatorAsDTO();
+            return creator.CreatorAsDetailedDTO();
         }
         [HttpGet("get")]
-        public async Task<IEnumerable<CreatorDTO>> GetCreatorsAsync()
+        public async Task<IEnumerable<CreatorDetailedDTO>> GetCreatorsAsync()
         {
-            var creators = (await repository.GetCreatorsAsync()).Select(creator => creator.CreatorAsDTO());
+            var creators = (await repository.GetCreatorsAsync()).Select(creator => creator.CreatorAsDetailedDTO());
             return creators;
         }
     }

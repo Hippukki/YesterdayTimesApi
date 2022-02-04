@@ -59,12 +59,20 @@ namespace YesterdayTimesApi.Data
         #region [Category implementation]
         public async Task<Category> GetCategoryAsync(Guid id)
         {
-            return await Categories.FindAsync(id);
+            var categories = await Categories.Include(c => c.Articles)
+               .Include(c => c.Users)
+               .ToListAsync();
+            var category = (from c in categories where c.Id == id select c)
+                .SingleOrDefault();
+            return category;
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            return await Categories.ToListAsync();
+            var categories = await Categories.Include(c => c.Articles)
+               .Include(c => c.Users)
+               .ToListAsync();
+            return categories;
         }
 
         public async Task CreateCategoryAsync(Category item)
@@ -73,10 +81,10 @@ namespace YesterdayTimesApi.Data
             SaveChanges();
         }
 
-        public async Task UpdateCategoryAsync()
-        {
-            await SaveChangesAsync();
-        }
+        //public async Task UpdateCategoryAsync()
+        //{
+        //    await SaveChangesAsync();
+        //}
 
         public async Task DeleteCategoryAsync(Guid id)
         {
@@ -89,7 +97,11 @@ namespace YesterdayTimesApi.Data
         #region Creator implementation
         public async Task<Creator> GetCreatorAsync(Guid id)
         {
-            return await Creators.FindAsync(id);
+            var creators = await Creators.Include(c => c.Articles)
+                .ToListAsync();
+            var creator = (from c in creators where c.Id == id select c)
+                .SingleOrDefault();
+            return creator;
         }
         public async Task CreateCreatorAsync(Creator item)
         {
@@ -102,7 +114,9 @@ namespace YesterdayTimesApi.Data
         }
         public async Task<IEnumerable<Creator>> GetCreatorsAsync()
         {
-            return await Creators.ToListAsync();
+            var creators = await Creators.Include(c => c.Articles)
+                .ToListAsync();
+            return creators;
         }
         #endregion
     }
