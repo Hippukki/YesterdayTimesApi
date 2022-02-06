@@ -48,7 +48,17 @@ namespace YesterdayTimesApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "YesterdayTimesApi", Version = "v1" });
             });
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
+            });
         }
 
 
@@ -65,7 +75,7 @@ namespace YesterdayTimesApi
 
             app.UseRouting();
 
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors();
 
             app.UseAuthorization();
 
