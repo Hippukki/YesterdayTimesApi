@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
 using Microsoft.AspNetCore.Cors;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace YesterdayTimesApi
 {
@@ -30,6 +31,28 @@ namespace YesterdayTimesApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            #region AuthMW
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthOptions.ISSUER,
+
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.AUDIENCE,
+
+                        ValidateLifetime = true,
+
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
+            #endregion
+
+            #region dbAccess
             var connectionString = "server=localhost;user=root;password=67db7e34-7788-4be3-b24c-ff29afbccb9a;database=newsportal";
 
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
@@ -37,6 +60,7 @@ namespace YesterdayTimesApi
             services.AddDbContext<IRepository, NewsPortalContext>(
             dbContextOptions => dbContextOptions
                 .UseMySql(connectionString, serverVersion));//.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            #endregion
 
             services.AddControllers(options =>
             {
