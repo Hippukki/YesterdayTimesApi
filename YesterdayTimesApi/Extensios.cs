@@ -82,7 +82,6 @@ namespace YesterdayTimesApi
         {
             return new UserDTO
             {
-                Id = entity.Id,
                 Email = entity.Email,
                 Password = entity.Password
             };

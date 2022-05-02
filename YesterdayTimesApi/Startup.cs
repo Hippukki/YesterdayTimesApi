@@ -1,22 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
-using Microsoft.AspNetCore.Cors;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 namespace YesterdayTimesApi
 {
     public class Startup
@@ -31,35 +26,53 @@ namespace YesterdayTimesApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            #region AuthMW
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new()
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
-
-                        ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
-
-                        ValidateLifetime = true,
-
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true,
-                    };
-                });
-            #endregion
-
             #region dbAccess
-            var connectionString = "server=localhost;user=root;password=67db7e34-7788-4be3-b24c-ff29afbccb9a;database=newsportal";
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 
             services.AddDbContext<IRepository, NewsPortalContext>(
             dbContextOptions => dbContextOptions
                 .UseMySql(connectionString, serverVersion));//.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+            services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
+            #endregion
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            //    options.Password.RequireUppercase = true; // on production add more secured options
+            //    options.Password.RequireDigit = true;
+            //    options.SignIn.RequireConfirmedEmail = true;
+            //}).AddEntityFrameworkStores<NewsPortalContext>().AddDefaultTokenProviders();
+
+            #region AuthMW
+            services.AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o => {
+                var Key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false, // on production make it true
+                    ValidateAudience = false, // on production make it true
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JWT:Issuer"],
+                    ValidAudience = Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Key),
+                    ClockSkew = TimeSpan.Zero
+                };
+                o.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context => {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
             #endregion
 
             services.AddControllers(options =>
@@ -100,6 +113,8 @@ namespace YesterdayTimesApi
             app.UseRouting();
 
             app.UseCors();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using YesterdayTimesApi.Entities.JWTtoken;
 
 namespace YesterdayTimesApi.Data
 {
@@ -13,6 +16,7 @@ namespace YesterdayTimesApi.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Creator> Creators { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRefreshTokens> UserRefreshToken { get; set; }
         public NewsPortalContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
@@ -117,6 +121,80 @@ namespace YesterdayTimesApi.Data
             var creators = await Creators.Include(c => c.Articles)
                 .ToListAsync();
             return creators;
+        }
+        #endregion
+
+        #region User implemention
+        public async Task RegistrateUserAsync(User item)
+        {
+            await Users.AddAsync(item);
+            SaveChanges();
+        }
+
+        public async Task<UserRefreshTokens> AddUserRefreshTokens(UserRefreshTokens user)
+        {
+            await UserRefreshToken.AddAsync(user);
+            return user;
+        }
+
+        public async Task DeleteUserRefreshTokens(string username, string refreshToken)
+        {
+            var item = await UserRefreshToken.FirstOrDefaultAsync(x => x.UserName == username && x.RefreshToken == refreshToken);
+            if (item != null)
+            {
+                UserRefreshToken.Remove(item);
+            }
+        }
+
+        public async Task<UserRefreshTokens> GetSavedRefreshTokens(string username, string refreshToken)
+        {
+            return await UserRefreshToken.FirstOrDefaultAsync(x => x.UserName == username && x.RefreshToken == refreshToken && x.IsActive == true);
+        }
+
+        public int SaveCommit()
+        {
+            return SaveChanges();
+        }
+
+        public async Task<bool> IsValidUserAsync(UserDTO user)
+        {
+            var users = await GetUsersAsync();
+            var currentUser = users.FirstOrDefault(u => u.Email.ToLower() ==
+                user.Email.ToLower() && u.Password == user.Password);
+            if (currentUser is not null)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+        public async Task<User> GetUserAsync(Guid id)
+        {
+            var users = await Users.Include(u => u.Categories)
+               .ToListAsync();
+            var user = (from u in users where u.Id == id select u)
+                .SingleOrDefault();
+            return user;
+        }
+
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            var users = await Users.Include(u => u.Categories)
+                .ToListAsync();
+            return users;
+        }
+
+        public async Task UpdateUserAsync()
+        {
+            await SaveChangesAsync();
+        }
+
+        public async Task DeleteUserAsync(Guid id)
+        {
+            var existingItem = await Users.FindAsync(id);
+            Users.Remove(existingItem);
+            SaveChanges();
         }
         #endregion
     }

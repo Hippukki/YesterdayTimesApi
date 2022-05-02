@@ -12,7 +12,7 @@ namespace YesterdayTimesApi.Entities
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-        [Required]
+        //[Required]
         public Guid SelctedCategoryId1 { get; set; }
         public Guid SelctedCategoryId2 { get; set; }
         public Guid SelctedCategoryId3 { get; set; }
