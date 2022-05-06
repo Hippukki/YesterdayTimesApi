@@ -17,34 +17,27 @@ using YesterdayTimesApi.Entities.JWTtoken;
 namespace YesterdayTimesApi.Controllers
 {
 	[Authorize]
-	[Route("Authentication")]
+	[Route("authentication")]
 	[ApiController]
 	public class AuthenticationController : ControllerBase
 	{
 		private readonly IJWTManagerRepository jWTManager;
 		private readonly IRepository repository;
 
-		public AuthenticationController(IJWTManagerRepository jWTManager,  IRepository repository)
+		public AuthenticationController(IJWTManagerRepository jWTManager, IRepository repository)
 		{
 			this.jWTManager = jWTManager;
 			this.repository = repository;
 		}
 
-		[HttpGet("users")]
-		public async Task<IEnumerable<UserDTO>> GetAsync()
-		{
-			var users = (await repository.GetUsersAsync()).Select(user => user.UserAsDTO());
-			return users;
-		}
-
 		[AllowAnonymous]
 		[HttpPost]
-		[Route("authenticate")]
+		[Route("login")]
 		public async Task<IActionResult> AuthenticateAsync(UserDTO usersdata)
 		{
 			var validUser = await repository.IsValidUserAsync(usersdata);
 
-			if (!validUser)
+			if (validUser == false)
 			{
 				return Unauthorized("Incorrect username or password!");
 			}
@@ -79,7 +72,7 @@ namespace YesterdayTimesApi.Controllers
 			//retrieve the saved refresh token from database
 			var savedRefreshToken = await repository.GetSavedRefreshTokens(username, token.Refresh_Token);
 
-			if (savedRefreshToken.RefreshToken != token.Refresh_Token)
+			if (savedRefreshToken.RefreshToken == null || savedRefreshToken.RefreshToken != token.Refresh_Token)
 			{
 				return Unauthorized("Invalid attempt!");
 			}
