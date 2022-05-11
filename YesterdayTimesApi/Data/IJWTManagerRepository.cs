@@ -9,8 +9,8 @@ namespace YesterdayTimesApi.Data
 {
 	public interface IJWTManagerRepository
 	{
-		Tokens GenerateToken(string userName);
-		Tokens GenerateRefreshToken(string userName);
+		Tokens GenerateToken(string userName, string role);
+		Tokens GenerateRefreshToken(string userName, string role);
 		ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 	}
 }

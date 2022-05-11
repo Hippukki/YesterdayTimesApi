@@ -10,8 +10,6 @@ namespace YesterdayTimesApi.Data
 {
     public interface IRepository
     {
-        DbSet<User> Users { get; set; }
-
         //Article
         Task<Article> GetArticleAsync(Guid id);
         Task<IEnumerable<Article>> GetArticlesAsync();
@@ -36,7 +34,7 @@ namespace YesterdayTimesApi.Data
         Task RegistrateUserAsync(User item);
         Task<UserRefreshTokens> AddUserRefreshTokens(UserRefreshTokens user);
         Task DeleteUserRefreshTokens(string username, string refreshToken);
-        Task<UserRefreshTokens> GetSavedRefreshTokens(string username, string refreshToken);
+        Task<UserRefreshTokens> GetSavedRefreshTokens(string username, string role, string refreshToken);
         int SaveCommit();
         Task<bool> IsValidUserAsync(UserDTO user);
         Task<User> GetUserAsync(Guid id);

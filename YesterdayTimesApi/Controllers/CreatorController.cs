@@ -25,6 +25,7 @@ namespace YesterdayTimesApi.Controllers
             {
                 Id = Guid.NewGuid(),
                 fullName = created.fullName,
+                Role = created.Role
             };
             await repository.CreateCreatorAsync(creator);
             return NoContent();

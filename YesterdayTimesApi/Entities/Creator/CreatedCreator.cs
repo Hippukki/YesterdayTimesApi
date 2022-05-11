@@ -10,5 +10,7 @@ namespace YesterdayTimesApi.Entities
     {
         [Required]
         public string fullName { get; set; }
+        [Required]
+        public string Role { get; set; }
     }
 }

@@ -84,7 +84,8 @@ namespace YesterdayTimesApi
             {
                 Id = entity.Id,
                 Email = entity.Email,
-                Password = entity.Password
+                Password = entity.Password,
+                Role = entity.Role
             };
         }
         public static UserDetailedDTO UserAsDetailedDTO(this User entity)
@@ -94,6 +95,7 @@ namespace YesterdayTimesApi
                 Id = entity.Id,
                 Email = entity.Email,
                 Password = entity.Password,
+                Role = entity.Role,
                 Categories = entity.Categories.Select(e => e.CategoryAsDTO()).ToList()
             };
         }

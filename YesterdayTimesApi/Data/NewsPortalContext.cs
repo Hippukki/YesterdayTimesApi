@@ -146,9 +146,9 @@ namespace YesterdayTimesApi.Data
             }
         }
 
-        public async Task<UserRefreshTokens> GetSavedRefreshTokens(string username, string refreshToken)
+        public async Task<UserRefreshTokens> GetSavedRefreshTokens(string username, string role, string refreshToken)
         {
-            return await UserRefreshToken.FirstOrDefaultAsync(x => x.UserName == username && x.RefreshToken == refreshToken && x.IsActive == true);
+            return await UserRefreshToken.FirstOrDefaultAsync(x => x.UserName == username && x.Role == role && x.RefreshToken == refreshToken && x.IsActive == true);
         }
 
         public int SaveCommit()

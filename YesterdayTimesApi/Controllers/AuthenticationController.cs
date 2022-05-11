@@ -42,7 +42,7 @@ namespace YesterdayTimesApi.Controllers
 				return Unauthorized("Incorrect username or password!");
 			}
 
-			var token = jWTManager.GenerateToken(usersdata.Email);
+			var token = jWTManager.GenerateToken(usersdata.Email, usersdata.Role);
 
 			if (token == null)
 			{
@@ -53,7 +53,8 @@ namespace YesterdayTimesApi.Controllers
 			UserRefreshTokens obj = new UserRefreshTokens
 			{
 				RefreshToken = token.Refresh_Token,
-				UserName = usersdata.Email
+				UserName = usersdata.Email,
+				Role = usersdata.Role
 			};
 
 			await repository.AddUserRefreshTokens(obj);
@@ -68,16 +69,24 @@ namespace YesterdayTimesApi.Controllers
 		{
 			var principal = jWTManager.GetPrincipalFromExpiredToken(token.Access_Token);
 			var username = principal.Identity?.Name;
+			var role = "";
+			foreach(Claim claim in principal.Claims)
+            {
+				if (claim.Type == ClaimTypes.Role)
+				{
+					role = claim.Value;
+				}
+			}
 
 			//retrieve the saved refresh token from database
-			var savedRefreshToken = await repository.GetSavedRefreshTokens(username, token.Refresh_Token);
+			var savedRefreshToken = await repository.GetSavedRefreshTokens(username, role, token.Refresh_Token);
 
 			if (savedRefreshToken.RefreshToken == null || savedRefreshToken.RefreshToken != token.Refresh_Token)
 			{
 				return Unauthorized("Invalid attempt!");
 			}
 
-			var newJwtToken = jWTManager.GenerateRefreshToken(username);
+			var newJwtToken = jWTManager.GenerateRefreshToken(username, role);
 
 			if (newJwtToken == null)
 			{

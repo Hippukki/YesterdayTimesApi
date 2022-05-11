@@ -20,17 +20,17 @@ namespace YesterdayTimesApi.Data
 		{
 			this.iconfiguration = iconfiguration;
 		}
-		public Tokens GenerateToken(string userName)
+		public Tokens GenerateToken(string userName, string role)
 		{
-			return GenerateJWTTokens(userName);
+			return GenerateJWTTokens(userName, role);
 		}
 
-		public Tokens GenerateRefreshToken(string username)
+		public Tokens GenerateRefreshToken(string username, string role)
 		{
-			return GenerateJWTTokens(username);
+			return GenerateJWTTokens(username, role);
 		}
 
-		public Tokens GenerateJWTTokens(string userName)
+		public Tokens GenerateJWTTokens(string userName, string role)
 		{
 			try
 			{
@@ -40,7 +40,8 @@ namespace YesterdayTimesApi.Data
 				{
 					Subject = new ClaimsIdentity(new Claim[]
 				  {
-				    new Claim(ClaimTypes.Name, userName)
+				    new Claim(ClaimTypes.Name, userName),
+					new Claim(ClaimTypes.Role, role)
 				  }),
 					Expires = DateTime.Now.AddMinutes(1),
 					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)

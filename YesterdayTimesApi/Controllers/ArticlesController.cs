@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,7 @@ namespace YesterdayTimesApi.Controllers
             }
             return article.ArticleAsDetailedDTO();
         }
+        [Authorize(Roles = "admin")]
         [HttpGet("get")]
         public async Task<IEnumerable<ArticleDetailedDTO>> GetArticlesAsync()
         {
