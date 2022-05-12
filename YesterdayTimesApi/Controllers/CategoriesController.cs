@@ -19,6 +19,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
+        //[Authorize(Roles ="admin")]
         [HttpPost("create")]
         public async Task<ActionResult<CategoryDetailedDTO>> CreateCategoryAsync(CreatedCategory created)
         {
@@ -40,23 +41,13 @@ namespace YesterdayTimesApi.Controllers
             }
             return category.CategoryAsDetailedDTO();
         }
-        [Authorize(Roles = "user")]
         [HttpGet("get")]
         public async Task<IEnumerable<CategoryDetailedDTO>> GetCategoriesAsync()
         {
             var categories = (await repository.GetCategoriesAsync()).Select(category => category.CategoryAsDetailedDTO());
             return categories;
         }
-        //[HttpPut("update/{id}")]
-        //public async Task<ActionResult> UpdateCategoryAsync(Guid id, UpdatedCategory updated)
-        //{
-        //    var existingCategory = await repository.GetCategoryAsync(id);
-        //    if (existingCategory is null)
-        //        return NotFound();
-        //    existingCategory.Articles.Add(await repository.GetArticleAsync(updated.ArticleId));
-        //    await repository.UpdateCategoryAsync();
-        //    return NoContent();
-        //}
+        //[Authorize(Roles ="admin")]
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteCategoryAsync(Guid id)
         {

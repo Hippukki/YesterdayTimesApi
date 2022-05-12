@@ -9,7 +9,7 @@ using YesterdayTimesApi.Entities;
 
 namespace YesterdayTimesApi.Controllers
 {
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
     [Route("creators")]
     [ApiController]
     public class CreatorController : ControllerBase
@@ -20,7 +20,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost("create")]
         public async Task<ActionResult> CreateCreatorAsync(CreatedCreator created)
         {
@@ -31,7 +31,7 @@ namespace YesterdayTimesApi.Controllers
                 Role = created.Role
             };
             await repository.CreateCreatorAsync(creator);
-            return NoContent();
+            return CreatedAtAction(nameof(GetCreatorAsync), new { Id = creator.Id }, creator.CreatorAsDetailedDTO());
         }
         [HttpGet("get/{id}")]
         public async Task<ActionResult<CreatorDetailedDTO>> GetCreatorAsync(Guid id)

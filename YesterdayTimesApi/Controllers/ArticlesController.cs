@@ -20,7 +20,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
-
+        //[Authorize(Roles ="admin")]
         [HttpPost("create")]
         public async Task<ActionResult> CreateArticleAsync(CreatedArticle created, Guid idCreator)
         {
@@ -55,7 +55,6 @@ namespace YesterdayTimesApi.Controllers
             }
             return article.ArticleAsDetailedDTO();
         }
-        [Authorize(Roles = "admin")]
         [HttpGet("get")]
         public async Task<IEnumerable<ArticleDetailedDTO>> GetArticlesAsync()
         {
@@ -63,6 +62,7 @@ namespace YesterdayTimesApi.Controllers
                 .Select(article => article.ArticleAsDetailedDTO());
             return articles;
         }
+        //[Authorize(Roles ="admin")]
         [HttpPut("update/{id}")]
         public async Task<ActionResult> UpdateArticleAsync(Guid id, UpdatedArticle updated)
         {
@@ -76,6 +76,7 @@ namespace YesterdayTimesApi.Controllers
             await repository.UpdateArticleAsync();
             return NoContent();
         }
+        //[Authorize(Roles ="admin")]
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteArticleAsync(Guid id)
         {

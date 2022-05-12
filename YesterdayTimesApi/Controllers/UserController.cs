@@ -24,12 +24,12 @@ namespace YesterdayTimesApi.Controllers
         [HttpPost("singup")]
         public async Task<ActionResult> RegisterUserAsync(CreatedUser created)
         {
-            //List<Category> selectedCategories = new()
-            //{
-            //    await repository.GetCategoryAsync(created.SelctedCategoryId1),
-            //    await repository.GetCategoryAsync(created.SelctedCategoryId2),
-            //    await repository.GetCategoryAsync(created.SelctedCategoryId3)
-            //};
+            List<Category> selectedCategories = new()
+            {
+                await repository.GetCategoryAsync(created.SelctedCategoryId1),
+                await repository.GetCategoryAsync(created.SelctedCategoryId2),
+                await repository.GetCategoryAsync(created.SelctedCategoryId3)
+            };
 
             User user = new()
             {
@@ -37,7 +37,7 @@ namespace YesterdayTimesApi.Controllers
                 Email = created.Email,
                 Password = created.Password,
                 Role = created.Role,
-                //Categories = selectedCategories                
+                Categories = selectedCategories                
             };
             await repository.RegistrateUserAsync(user);
             return NoContent();
