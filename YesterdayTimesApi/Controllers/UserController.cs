@@ -9,7 +9,7 @@ using YesterdayTimesApi.Entities;
 
 namespace YesterdayTimesApi.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "user, admin")]
     [Route("user")]
     [ApiController]
     public class UserController : ControllerBase
@@ -42,7 +42,6 @@ namespace YesterdayTimesApi.Controllers
             await repository.RegistrateUserAsync(user);
             return NoContent();
         }
-        [AllowAnonymous]
         [HttpGet("users")]// For testing, delete in prod
         public async Task<IEnumerable<UserDetailedDTO>> GetAsync()
         {

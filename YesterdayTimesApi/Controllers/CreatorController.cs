@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using YesterdayTimesApi.Entities;
 
 namespace YesterdayTimesApi.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("creators")]
     [ApiController]
     public class CreatorController : ControllerBase
@@ -18,6 +20,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
+        [AllowAnonymous]
         [HttpPost("create")]
         public async Task<ActionResult> CreateCreatorAsync(CreatedCreator created)
         {

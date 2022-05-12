@@ -73,6 +73,7 @@ namespace YesterdayTimesApi
             {
                 Id = entity.Id,
                 fullName = entity.fullName,
+                Role = entity.Role,
                 Articles = entity.Articles.Select(e => e.ArticleAsDTO()).ToList()
             };
         }
