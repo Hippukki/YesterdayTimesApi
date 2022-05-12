@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
 using YesterdayTimesApi.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace YesterdayTimesApi
 {
@@ -98,6 +99,25 @@ namespace YesterdayTimesApi
                 Role = entity.Role,
                 Categories = entity.Categories.Select(e => e.CategoryAsDTO()).ToList()
             };
+        }
+        #endregion
+
+        #region [Common Extensios]
+        public static string HashUserPassword(this User user, string password)
+        {
+            PasswordHasher<User> passwordHasher = new();
+            string hashedPassword = passwordHasher.HashPassword(user, password);
+            return hashedPassword;
+        }
+        public static bool UserPasswordVerification(this User user, string hashedPassword, string providedPassword)
+        {
+            PasswordHasher<User> passwordHasher = new();
+            PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, hashedPassword, providedPassword);
+            if(result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
     }

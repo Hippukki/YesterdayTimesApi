@@ -97,7 +97,8 @@ namespace YesterdayTimesApi.Controllers
 			UserRefreshTokens obj = new UserRefreshTokens
 			{
 				RefreshToken = newJwtToken.Refresh_Token,
-				UserName = username
+				UserName = username,
+				Role = role
 			};
 
 			await repository.DeleteUserRefreshTokens(username, token.Refresh_Token);

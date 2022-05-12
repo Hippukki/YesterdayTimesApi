@@ -43,7 +43,7 @@ namespace YesterdayTimesApi.Controllers
             return NoContent();
         }
         [AllowAnonymous]
-        [HttpGet("users")]
+        [HttpGet("users")]// For testing, delete in prod
         public async Task<IEnumerable<UserDetailedDTO>> GetAsync()
         {
             var users = (await repository.GetUsersAsync()).Select(user => user.UserAsDetailedDTO());

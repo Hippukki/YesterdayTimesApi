@@ -127,6 +127,8 @@ namespace YesterdayTimesApi.Data
         #region User implemention
         public async Task RegistrateUserAsync(User item)
         {
+            var HashedPassword = item.HashUserPassword(item.Password);
+            item.Password = HashedPassword;
             await Users.AddAsync(item);
             SaveChanges();
         }
@@ -160,10 +162,11 @@ namespace YesterdayTimesApi.Data
         {
             var users = await GetUsersAsync();
             var currentUser = users.FirstOrDefault(u => u.Email.ToLower() ==
-                user.Email.ToLower() && u.Password == user.Password);
+                user.Email.ToLower());
             if (currentUser is not null)
             {
-                return true;
+                return currentUser.UserPasswordVerification(currentUser.Password, user.Password);
+                
             }
             return false;
 
