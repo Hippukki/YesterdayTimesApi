@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Entities;
 using YesterdayTimesApi.Entities.JWTtoken;
+using YesterdayTimesApi.Pagination;
 
 namespace YesterdayTimesApi.Data
 {
@@ -12,7 +13,7 @@ namespace YesterdayTimesApi.Data
     {
         //Article
         Task<Article> GetArticleAsync(Guid id);
-        Task<IEnumerable<Article>> GetArticlesAsync();
+        Task<IEnumerable<Article>> GetArticlesAsync(ArticleQueryParameters parameters);
         Task CreateArticleAsync(Article item);
         Task UpdateArticleAsync();
         Task DeleteArticleAsync(Guid id);
@@ -28,7 +29,7 @@ namespace YesterdayTimesApi.Data
         Task<Creator> GetCreatorAsync(Guid id);
         Task CreateCreatorAsync(Creator item);
         Task UpdateCreatorAsync();
-        Task<IEnumerable<Creator>> GetCreatorsAsync();
+        Task<IEnumerable<Creator>> GetCreatorsAsync(CreatorQueryParameters parameters);
 
         //User
         Task RegistrateUserAsync(User item);
@@ -38,7 +39,7 @@ namespace YesterdayTimesApi.Data
         int SaveCommit();
         Task<bool> IsValidUserAsync(UserDTO user);
         Task<User> GetUserAsync(Guid id);
-        Task<IEnumerable<User>> GetUsersAsync();
+        Task<IEnumerable<User>> GetUsersAsync(UserQueryParameters parameters);
         Task UpdateUserAsync();
         Task DeleteUserAsync(Guid id);
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
 using YesterdayTimesApi.Entities;
+using YesterdayTimesApi.Pagination;
 
 namespace YesterdayTimesApi.Controllers
 {
@@ -42,10 +43,12 @@ namespace YesterdayTimesApi.Controllers
             await repository.RegistrateUserAsync(user);
             return NoContent();
         }
+        //[Authorize(Roles = "admin")]
         [HttpGet("users")]// For testing, delete in prod
-        public async Task<IEnumerable<UserDetailedDTO>> GetAsync()
+        public async Task<IEnumerable<UserDetailedDTO>> GetUsersAsync([FromQuery] UserQueryParameters parameters)
         {
-            var users = (await repository.GetUsersAsync()).Select(user => user.UserAsDetailedDTO());
+            var users = (await repository.GetUsersAsync(parameters)).Select(user => user.UserAsDetailedDTO());
+            Response.Headers.Add("X-Total-Count", users.Count().ToString());
             return users;
         }
         [HttpGet("articles")]

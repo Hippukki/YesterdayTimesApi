@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
 using YesterdayTimesApi.Entities;
+using YesterdayTimesApi.Pagination;
 
 namespace YesterdayTimesApi.Controllers
 {
@@ -44,9 +45,10 @@ namespace YesterdayTimesApi.Controllers
             return creator.CreatorAsDetailedDTO();
         }
         [HttpGet("get")]
-        public async Task<IEnumerable<CreatorDetailedDTO>> GetCreatorsAsync()
+        public async Task<IEnumerable<CreatorDetailedDTO>> GetCreatorsAsync([FromQuery] CreatorQueryParameters parameters)
         {
-            var creators = (await repository.GetCreatorsAsync()).Select(creator => creator.CreatorAsDetailedDTO());
+            var creators = (await repository.GetCreatorsAsync(parameters)).Select(creator => creator.CreatorAsDetailedDTO());
+            Response.Headers.Add("X-Total-Count", creators.Count().ToString());
             return creators;
         }
     }

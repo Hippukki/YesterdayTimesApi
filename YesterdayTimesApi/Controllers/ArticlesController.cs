@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
 using YesterdayTimesApi.Entities;
-
+using YesterdayTimesApi.Pagination;
 
 namespace YesterdayTimesApi.Controllers
 {
@@ -56,10 +56,11 @@ namespace YesterdayTimesApi.Controllers
             return article.ArticleAsDetailedDTO();
         }
         [HttpGet("get")]
-        public async Task<IEnumerable<ArticleDetailedDTO>> GetArticlesAsync()
+        public async Task<IEnumerable<ArticleDetailedDTO>> GetArticlesAsync([FromQuery] ArticleQueryParameters parameters)
         {
-            var articles = (await repository.GetArticlesAsync())
+            var articles = (await repository.GetArticlesAsync(parameters))
                 .Select(article => article.ArticleAsDetailedDTO());
+            Response.Headers.Add("X-Total-Count", articles.Count().ToString());
             return articles;
         }
         //[Authorize(Roles ="admin")]

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using YesterdayTimesApi.Entities.JWTtoken;
+using YesterdayTimesApi.Pagination;
 
 namespace YesterdayTimesApi.Data
 {
@@ -20,6 +21,13 @@ namespace YesterdayTimesApi.Data
         public NewsPortalContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
+            //Creators.Add(new Creator()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    fullName = "GodOfNews",
+            //    Role = "admin"
+            //});
+            //SaveChanges();
         }
 
         #region [Article implementation]
@@ -33,10 +41,13 @@ namespace YesterdayTimesApi.Data
             return article;
         }
 
-        public async Task<IEnumerable<Article>> GetArticlesAsync()
+        public async Task<IEnumerable<Article>> GetArticlesAsync(ArticleQueryParameters parameters)
         {
             var articles = await Articles.Include(a => a.Creators)
                 .Include(a => a.Category)
+                .OrderByDescending(a => a.createdDate)
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
                 .ToListAsync();
             return articles;
         }
@@ -116,9 +127,12 @@ namespace YesterdayTimesApi.Data
         {
             await SaveChangesAsync();
         }
-        public async Task<IEnumerable<Creator>> GetCreatorsAsync()
+        public async Task<IEnumerable<Creator>> GetCreatorsAsync(CreatorQueryParameters parameters)
         {
             var creators = await Creators.Include(c => c.Articles)
+                .OrderByDescending(c => c.fullName)
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
                 .ToListAsync();
             return creators;
         }
@@ -160,7 +174,7 @@ namespace YesterdayTimesApi.Data
 
         public async Task<bool> IsValidUserAsync(UserDTO user)
         {
-            var users = await GetUsersAsync();
+            var users = await Users.ToListAsync();
             var currentUser = users.FirstOrDefault(u => u.Email.ToLower() ==
                 user.Email.ToLower());
             if (currentUser is not null)
@@ -181,9 +195,12 @@ namespace YesterdayTimesApi.Data
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync(UserQueryParameters parameters)
         {
             var users = await Users.Include(u => u.Categories)
+                .OrderByDescending(u => u.Email)
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
                 .ToListAsync();
             return users;
         }
