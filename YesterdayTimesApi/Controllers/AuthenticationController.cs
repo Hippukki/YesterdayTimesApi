@@ -34,16 +34,21 @@ namespace YesterdayTimesApi.Controllers
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("login")]
-		public async Task<IActionResult> AuthenticateAsync(UserDTO usersdata)
+		public async Task<IActionResult> AuthenticateAsync(UserMetaData usersdata)
 		{
 			var validUser = await repository.IsValidUserAsync(usersdata);
-
+			var validAdmin = await repository.IsValidAdminAsync(usersdata);
+			var role = "user";
 			if (validUser == false)
 			{
-				return Unauthorized("Incorrect username or password!");
+                if (validAdmin == false)
+                {
+					return Unauthorized("Incorrect username or password!");
+				}
+				role = "admin";
 			}
 
-			var token = jWTManager.GenerateToken(usersdata.Email, usersdata.Role);
+			var token = jWTManager.GenerateToken(usersdata.Login, role);
 
 			if (token == null)
 			{
@@ -54,8 +59,8 @@ namespace YesterdayTimesApi.Controllers
 			UserRefreshTokens obj = new UserRefreshTokens
 			{
 				RefreshToken = token.Refresh_Token,
-				UserName = usersdata.Email,
-				Role = usersdata.Role
+				UserName = usersdata.Login,
+				Role = role
 			};
 
 			await repository.AddUserRefreshTokens(obj);

@@ -120,6 +120,8 @@ namespace YesterdayTimesApi.Data
         }
         public async Task CreateCreatorAsync(Creator item)
         {
+            var HashedPassword = item.HashUserPassword(item.Password);
+            item.Password = HashedPassword;
             await Creators.AddAsync(item);
             SaveChanges();
         }
@@ -127,6 +129,19 @@ namespace YesterdayTimesApi.Data
         {
             await SaveChangesAsync();
         }
+        public async Task<bool> IsValidAdminAsync(UserMetaData user)
+        {
+            var admins = await Creators.ToListAsync();
+            var currentAdmin = admins.FirstOrDefault(u => u.fullName.ToLower() ==
+                user.Login.ToLower());
+            if (currentAdmin is not null)
+            {
+                return currentAdmin.UserPasswordVerification(currentAdmin.Password, user.Password);
+
+            }
+            return false;
+        }
+
         public async Task<IEnumerable<Creator>> GetCreatorsAsync(CreatorQueryParameters parameters)
         {
             var creators = await Creators.Include(c => c.Articles)
@@ -172,11 +187,11 @@ namespace YesterdayTimesApi.Data
             return SaveChanges();
         }
 
-        public async Task<bool> IsValidUserAsync(UserDTO user)
+        public async Task<bool> IsValidUserAsync(UserMetaData user)
         {
             var users = await Users.ToListAsync();
             var currentUser = users.FirstOrDefault(u => u.Email.ToLower() ==
-                user.Email.ToLower());
+                user.Login.ToLower());
             if (currentUser is not null)
             {
                 return currentUser.UserPasswordVerification(currentUser.Password, user.Password);

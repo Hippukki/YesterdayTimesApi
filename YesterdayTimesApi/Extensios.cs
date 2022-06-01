@@ -104,15 +104,15 @@ namespace YesterdayTimesApi
         #endregion
 
         #region [Common Extensios]
-        public static string HashUserPassword(this User user, string password)
+        public static string HashUserPassword(this object user, string password)
         {
-            PasswordHasher<User> passwordHasher = new();
+            PasswordHasher<object> passwordHasher = new();
             string hashedPassword = passwordHasher.HashPassword(user, password);
             return hashedPassword;
         }
-        public static bool UserPasswordVerification(this User user, string hashedPassword, string providedPassword)
+        public static bool UserPasswordVerification(this object user, string hashedPassword, string providedPassword)
         {
-            PasswordHasher<User> passwordHasher = new();
+            PasswordHasher<object> passwordHasher = new();
             PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, hashedPassword, providedPassword);
             if(result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded)
             {

@@ -29,7 +29,8 @@ namespace YesterdayTimesApi.Controllers
             {
                 Id = Guid.NewGuid(),
                 fullName = created.fullName,
-                Role = created.Role
+                Password = created.Password,
+                Role = "admin"
             };
             await repository.CreateCreatorAsync(creator);
             return CreatedAtAction(nameof(GetCreatorAsync), new { Id = creator.Id }, creator.CreatorAsDetailedDTO());

@@ -29,6 +29,7 @@ namespace YesterdayTimesApi.Data
         Task<Creator> GetCreatorAsync(Guid id);
         Task CreateCreatorAsync(Creator item);
         Task UpdateCreatorAsync();
+        Task<bool> IsValidAdminAsync(UserMetaData user);
         Task<IEnumerable<Creator>> GetCreatorsAsync(CreatorQueryParameters parameters);
 
         //User
@@ -37,7 +38,7 @@ namespace YesterdayTimesApi.Data
         Task DeleteUserRefreshTokens(string username, string refreshToken);
         Task<UserRefreshTokens> GetSavedRefreshTokens(string username, string role, string refreshToken);
         int SaveCommit();
-        Task<bool> IsValidUserAsync(UserDTO user);
+        Task<bool> IsValidUserAsync(UserMetaData user);
         Task<User> GetUserAsync(Guid id);
         Task<IEnumerable<User>> GetUsersAsync(UserQueryParameters parameters);
         Task UpdateUserAsync();

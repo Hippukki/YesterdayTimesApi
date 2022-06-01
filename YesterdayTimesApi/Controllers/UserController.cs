@@ -37,7 +37,7 @@ namespace YesterdayTimesApi.Controllers
                 Id = Guid.NewGuid(),
                 Email = created.Email,
                 Password = created.Password,
-                Role = created.Role,
+                Role = "user",
                 Categories = selectedCategories                
             };
             await repository.RegistrateUserAsync(user);
