@@ -43,7 +43,7 @@ namespace YesterdayTimesApi.Controllers
             await repository.RegistrateUserAsync(user);
             return NoContent();
         }
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("users")]// For testing, delete in prod
         public async Task<IEnumerable<UserDetailedDTO>> GetUsersAsync([FromQuery] UserQueryParameters parameters)
         {

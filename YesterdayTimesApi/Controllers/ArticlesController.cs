@@ -20,7 +20,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
-        //[Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin")]
         [HttpPost("create")]
         public async Task<ActionResult> CreateArticleAsync(CreatedArticle created, Guid idCreator)
         {
@@ -63,7 +63,7 @@ namespace YesterdayTimesApi.Controllers
             Response.Headers.Add("X-Total-Count", articles.Count().ToString());
             return articles;
         }
-        //[Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin")]
         [HttpPut("update/{id}")]
         public async Task<ActionResult> UpdateArticleAsync(Guid id, UpdatedArticle updated)
         {
@@ -77,7 +77,7 @@ namespace YesterdayTimesApi.Controllers
             await repository.UpdateArticleAsync();
             return NoContent();
         }
-        //[Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin")]
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteArticleAsync(Guid id)
         {

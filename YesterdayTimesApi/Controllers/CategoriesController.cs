@@ -19,7 +19,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
-        //[Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin")]
         [HttpPost("create")]
         public async Task<ActionResult<CategoryDetailedDTO>> CreateCategoryAsync(CreatedCategory created)
         {
@@ -47,7 +47,7 @@ namespace YesterdayTimesApi.Controllers
             var categories = (await repository.GetCategoriesAsync()).Select(category => category.CategoryAsDetailedDTO());
             return categories;
         }
-        //[Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin")]
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteCategoryAsync(Guid id)
         {

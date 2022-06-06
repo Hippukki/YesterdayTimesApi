@@ -10,7 +10,6 @@ using YesterdayTimesApi.Pagination;
 
 namespace YesterdayTimesApi.Controllers
 {
-    //[Authorize(Roles = "admin")]
     [Route("creators")]
     [ApiController]
     public class CreatorController : ControllerBase
@@ -21,7 +20,7 @@ namespace YesterdayTimesApi.Controllers
         {
             this.repository = repository;
         }
-        //[AllowAnonymous]
+        //[Authorize(Roles = "admin")]
         [HttpPost("create")]
         public async Task<ActionResult> CreateCreatorAsync(CreatedCreator created)
         {
@@ -45,6 +44,7 @@ namespace YesterdayTimesApi.Controllers
             }
             return creator.CreatorAsDetailedDTO();
         }
+        [Authorize(Roles = "admin")]
         [HttpGet("get")]
         public async Task<IEnumerable<CreatorDetailedDTO>> GetCreatorsAsync([FromQuery] CreatorQueryParameters parameters)
         {

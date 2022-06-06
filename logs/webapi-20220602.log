@@ -1,0 +1,40 @@
+[2022-06-02 01:37:12.467 +10:00  INF]  User profile is available. Using 'C:\Users\Павел\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2022-06-02 01:37:13.329 +10:00  INF]  Now listening on: https://localhost:5001
+[2022-06-02 01:37:13.330 +10:00  INF]  Now listening on: http://localhost:5000
+[2022-06-02 01:37:13.330 +10:00  INF]  Application started. Press Ctrl+C to shut down.
+[2022-06-02 01:37:13.330 +10:00  INF]  Hosting environment: Development
+[2022-06-02 01:37:13.330 +10:00  INF]  Content root path: D:\YTApi\YesterdayTimesApi
+[2022-06-02 01:37:16.832 +10:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - -
+[2022-06-02 01:37:17.102 +10:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - - - 200 - text/html;charset=utf-8 282.6252ms
+[2022-06-02 01:37:17.762 +10:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2022-06-02 01:37:18.014 +10:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 251.9965ms
+[2022-06-02 01:37:18.066 +10:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2022-06-02 01:37:18.082 +10:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 30.3255ms
+[2022-06-02 01:37:29.479 +10:00  INF]  Request starting HTTP/2 GET https://localhost:5001/articles/get - -
+[2022-06-02 01:37:29.635 +10:00  INF]  Executing endpoint 'YesterdayTimesApi.Controllers.ArticlesController.GetArticlesAsync (YesterdayTimesApi)'
+[2022-06-02 01:37:29.693 +10:00  INF]  Route matched with {action = "GetArticlesAsync", controller = "Articles"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[YesterdayTimesApi.Entities.ArticleDetailedDTO]] GetArticlesAsync(YesterdayTimesApi.Pagination.ArticleQueryParameters) on controller YesterdayTimesApi.Controllers.ArticlesController (YesterdayTimesApi).
+[2022-06-02 01:37:30.829 +10:00  INF]  Entity Framework Core 5.0.10 initialized 'NewsPortalContext' using provider 'Pomelo.EntityFrameworkCore.MySql' with options: ServerVersion 8.0.27-mysql 
+[2022-06-02 01:37:31.127 +10:00  INF]  Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE WHEN COUNT(*) = 0 THEN FALSE ELSE TRUE END
+FROM information_schema.tables
+WHERE table_type = 'BASE TABLE' AND table_schema = 'newsportal'
+[2022-06-02 01:37:31.860 +10:00  INF]  Executed DbCommand (37ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `t`.`Id`, `t`.`Body`, `t`.`CategoryID`, `t`.`Title`, `t`.`createdDate`, `c`.`Id`, `c`.`Name`, `t0`.`ArticlesId`, `t0`.`CreatorsId`, `t0`.`Id`, `t0`.`Password`, `t0`.`Role`, `t0`.`fullName`
+FROM (
+    SELECT `a`.`Id`, `a`.`Body`, `a`.`CategoryID`, `a`.`Title`, `a`.`createdDate`
+    FROM `Articles` AS `a`
+    ORDER BY `a`.`createdDate` DESC
+    LIMIT @__p_1 OFFSET @__p_0
+) AS `t`
+INNER JOIN `Categories` AS `c` ON `t`.`CategoryID` = `c`.`Id`
+LEFT JOIN (
+    SELECT `a0`.`ArticlesId`, `a0`.`CreatorsId`, `c0`.`Id`, `c0`.`Password`, `c0`.`Role`, `c0`.`fullName`
+    FROM `ArticleCreator` AS `a0`
+    INNER JOIN `Creators` AS `c0` ON `a0`.`CreatorsId` = `c0`.`Id`
+) AS `t0` ON `t`.`Id` = `t0`.`ArticlesId`
+ORDER BY `t`.`createdDate` DESC, `t`.`Id`, `c`.`Id`, `t0`.`ArticlesId`, `t0`.`CreatorsId`, `t0`.`Id`
+[2022-06-02 01:37:31.886 +10:00  INF]  Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[YesterdayTimesApi.Entities.Article, YesterdayTimesApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[YesterdayTimesApi.Entities.ArticleDetailedDTO, YesterdayTimesApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2022-06-02 01:37:31.907 +10:00  INF]  Executed action YesterdayTimesApi.Controllers.ArticlesController.GetArticlesAsync (YesterdayTimesApi) in 2205.3584ms
+[2022-06-02 01:37:31.907 +10:00  INF]  Executed endpoint 'YesterdayTimesApi.Controllers.ArticlesController.GetArticlesAsync (YesterdayTimesApi)'
+[2022-06-02 01:37:31.914 +10:00  INF]  Request finished HTTP/2 GET https://localhost:5001/articles/get - - - 200 - application/json;+charset=utf-8 2435.3194ms
+[2022-06-02 01:37:53.172 +10:00  INF]  Application is shutting down...

@@ -21,13 +21,6 @@ namespace YesterdayTimesApi.Data
         public NewsPortalContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
-            //Creators.Add(new Creator()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    fullName = "GodOfNews",
-            //    Role = "admin"
-            //});
-            //SaveChanges();
         }
 
         #region [Article implementation]
