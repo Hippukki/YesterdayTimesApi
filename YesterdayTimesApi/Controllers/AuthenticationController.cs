@@ -64,7 +64,6 @@ namespace YesterdayTimesApi.Controllers
 			};
 
 			await repository.AddUserRefreshTokens(obj);
-			repository.SaveCommit();
 			return Ok(token);
 		}
 
@@ -106,11 +105,9 @@ namespace YesterdayTimesApi.Controllers
 				UserName = username,
 				Role = role
 			};
-
 			await repository.DeleteUserRefreshTokens(username, token.Refresh_Token);
 			await repository.AddUserRefreshTokens(obj);
 			repository.SaveCommit();
-
 			return Ok(newJwtToken);
 		}
 	}

@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using YesterdayTimesApi.Email;
+
 namespace YesterdayTimesApi
 {
     public class Startup
@@ -38,6 +40,7 @@ namespace YesterdayTimesApi
             services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
             #endregion
 
+            services.AddSingleton<IEmailService, EmailService>();
             //services.AddIdentity<IdentityUser, IdentityRole>(options => {
             //    options.Password.RequireUppercase = true; // on production add more secured options
             //    options.Password.RequireDigit = true;

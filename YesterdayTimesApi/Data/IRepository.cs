@@ -41,6 +41,7 @@ namespace YesterdayTimesApi.Data
         Task<bool> IsValidUserAsync(UserMetaData user);
         Task<User> GetUserAsync(Guid id);
         Task<IEnumerable<User>> GetUsersAsync(UserQueryParameters parameters);
+        Task<IEnumerable<User>> GetUsersByCategory(Guid id);
         Task UpdateUserAsync();
         Task DeleteUserAsync(Guid id);
     }

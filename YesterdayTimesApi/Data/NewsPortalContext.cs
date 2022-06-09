@@ -158,6 +158,7 @@ namespace YesterdayTimesApi.Data
         public async Task<UserRefreshTokens> AddUserRefreshTokens(UserRefreshTokens user)
         {
             await UserRefreshToken.AddAsync(user);
+            SaveChanges();
             return user;
         }
 
@@ -167,6 +168,7 @@ namespace YesterdayTimesApi.Data
             if (item != null)
             {
                 UserRefreshToken.Remove(item);
+                SaveChanges();
             }
         }
 
@@ -211,6 +213,15 @@ namespace YesterdayTimesApi.Data
                 .Take(parameters.PageSize)
                 .ToListAsync();
             return users;
+        }
+
+        public async Task<IEnumerable<User>> GetUsersByCategory(Guid id)
+        {
+            var users = Users.SelectMany(u => u.Categories,
+                            (u, c) => new { User = u, Category = c })
+                          .Where(u => u.Category.Id == id)
+                          .Select(u => u.User);
+            return await users.ToListAsync();
         }
 
         public async Task UpdateUserAsync()

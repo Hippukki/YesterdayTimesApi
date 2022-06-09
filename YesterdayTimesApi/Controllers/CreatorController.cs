@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
+using YesterdayTimesApi.Email;
 using YesterdayTimesApi.Entities;
 using YesterdayTimesApi.Pagination;
 
@@ -16,11 +17,14 @@ namespace YesterdayTimesApi.Controllers
     {
         private readonly IRepository repository;
 
-        public CreatorController(IRepository repository)
+        private readonly IEmailService emailService;
+
+        public CreatorController(IRepository repository, IEmailService emailService)
         {
             this.repository = repository;
+            this.emailService = emailService;
         }
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost("create")]
         public async Task<ActionResult> CreateCreatorAsync(CreatedCreator created)
         {

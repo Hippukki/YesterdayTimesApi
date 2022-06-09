@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YesterdayTimesApi.Data;
+using YesterdayTimesApi.Email;
 using YesterdayTimesApi.Entities;
 using YesterdayTimesApi.Pagination;
 
@@ -17,9 +18,12 @@ namespace YesterdayTimesApi.Controllers
     {
         private readonly IRepository repository;
 
-        public UserController(IRepository repository)
+        private readonly IEmailService emailService;
+
+        public UserController(IRepository repository, IEmailService emailService)
         {
             this.repository = repository;
+            this.emailService = emailService;
         }
         [AllowAnonymous]
         [HttpPost("singup")]
@@ -41,6 +45,7 @@ namespace YesterdayTimesApi.Controllers
                 Categories = selectedCategories                
             };
             await repository.RegistrateUserAsync(user);
+            await emailService.SendEmailAsync(user.Email, "Welcome!", "Hello! Thank you for using our portal. Together with us you won't miss any important event in this world!");
             return NoContent();
         }
         [Authorize(Roles = "admin")]

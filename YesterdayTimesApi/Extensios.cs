@@ -108,7 +108,7 @@ namespace YesterdayTimesApi
         {
             PasswordHasher<object> passwordHasher = new();
             string hashedPassword = passwordHasher.HashPassword(user, password);
-            return hashedPassword;
+            return hashedPassword.Replace('-', '+').Replace('_', '/');
         }
         public static bool UserPasswordVerification(this object user, string hashedPassword, string providedPassword)
         {
