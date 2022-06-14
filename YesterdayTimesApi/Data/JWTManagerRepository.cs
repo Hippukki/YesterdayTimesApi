@@ -43,7 +43,7 @@ namespace YesterdayTimesApi.Data
 				    new Claim(ClaimTypes.Name, userName),
 					new Claim(ClaimTypes.Role, role)
 				  }),
-					Expires = DateTime.Now.AddMinutes(10),
+					Expires = DateTime.Now.AddMinutes(15),
 					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
 				};
 				var token = tokenHandler.CreateToken(tokenDescriptor);

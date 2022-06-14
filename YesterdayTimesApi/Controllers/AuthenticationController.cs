@@ -56,8 +56,8 @@ namespace YesterdayTimesApi.Controllers
 			}
 
 			// saving refresh token to the db
-			UserRefreshTokens obj = new UserRefreshTokens
-			{
+			UserRefreshTokens obj = new()
+            {
 				RefreshToken = token.Refresh_Token,
 				UserName = usersdata.Login,
 				Role = role
@@ -99,8 +99,8 @@ namespace YesterdayTimesApi.Controllers
 			}
 
 			// saving refresh token to the db
-			UserRefreshTokens obj = new UserRefreshTokens
-			{
+			UserRefreshTokens obj = new()
+            {
 				RefreshToken = newJwtToken.Refresh_Token,
 				UserName = username,
 				Role = role

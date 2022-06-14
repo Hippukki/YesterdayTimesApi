@@ -96,7 +96,6 @@ namespace YesterdayTimesApi
             {
                 Id = entity.Id,
                 Email = entity.Email,
-                Password = entity.Password,
                 Role = entity.Role,
                 Categories = entity.Categories.Select(e => e.CategoryAsDTO()).ToList()
             };

@@ -31,6 +31,7 @@ namespace YesterdayTimesApi.Data
         Task UpdateCreatorAsync();
         Task<bool> IsValidAdminAsync(UserMetaData user);
         Task<IEnumerable<Creator>> GetCreatorsAsync(CreatorQueryParameters parameters);
+        Task DeleteCreatorAsync(Guid id);
 
         //User
         Task RegistrateUserAsync(User item);

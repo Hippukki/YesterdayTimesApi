@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using YesterdayTimesApi.Entities.JWTtoken;
 using YesterdayTimesApi.Pagination;
 
@@ -21,6 +19,18 @@ namespace YesterdayTimesApi.Data
         public NewsPortalContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Creator>().HasData(
+                new Creator
+                {
+                    Id = Guid.NewGuid(),
+                    fullName = "GodOfNews",
+                    Password = this.HashUserPassword("givemeyourpassword"),
+                    Role = "admin"
+                });
         }
 
         #region [Article implementation]
@@ -143,6 +153,13 @@ namespace YesterdayTimesApi.Data
                 .Take(parameters.PageSize)
                 .ToListAsync();
             return creators;
+        }
+
+        public async Task DeleteCreatorAsync(Guid id)
+        {
+            var existingItem = await Creators.FindAsync(id);
+            Creators.Remove(existingItem);
+            SaveChanges();
         }
         #endregion
 

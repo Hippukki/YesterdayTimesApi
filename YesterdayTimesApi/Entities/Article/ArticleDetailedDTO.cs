@@ -11,7 +11,7 @@ namespace YesterdayTimesApi.Entities
         public string Title { get; set; }
         public string Body { get; set; }
         public DateTimeOffset createdDate { get; init; }
-        public List<CreatorDTO> Creators { get; set; } = new();
+        public List<CreatorDTO> Creators { get; set; }
         public CategoryDTO Category { get; set; }
     }
 }

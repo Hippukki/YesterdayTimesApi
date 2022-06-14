@@ -36,8 +36,9 @@ namespace YesterdayTimesApi.Controllers
                 Role = "admin"
             };
             await repository.CreateCreatorAsync(creator);
-            return CreatedAtAction(nameof(GetCreatorAsync), new { Id = creator.Id }, creator.CreatorAsDetailedDTO());
+            return CreatedAtAction(nameof(GetCreatorAsync), new { creator.Id }, creator.CreatorAsDetailedDTO());
         }
+        [Authorize(Roles = "admin")]
         [HttpGet("get/{id}")]
         public async Task<ActionResult<CreatorDetailedDTO>> GetCreatorAsync(Guid id)
         {
@@ -48,13 +49,25 @@ namespace YesterdayTimesApi.Controllers
             }
             return creator.CreatorAsDetailedDTO();
         }
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, user")]
         [HttpGet("get")]
         public async Task<IEnumerable<CreatorDetailedDTO>> GetCreatorsAsync([FromQuery] CreatorQueryParameters parameters)
         {
             var creators = (await repository.GetCreatorsAsync(parameters)).Select(creator => creator.CreatorAsDetailedDTO());
             Response.Headers.Add("X-Total-Count", creators.Count().ToString());
             return creators;
+        }
+        [Authorize(Roles = "admin")]
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> DeleteCreatorAsync(Guid id)
+        {
+            var existingCreator = await repository.GetCreatorAsync(id);
+            if (existingCreator is null)
+            {
+                return NotFound();
+            }
+            await repository.DeleteCreatorAsync(id);
+            return NoContent();
         }
     }
 }
